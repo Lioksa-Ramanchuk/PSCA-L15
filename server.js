@@ -1,7 +1,7 @@
-import express from 'express';
-import { engine } from 'express-handlebars';
-import bodyParser from 'body-parser';
-import { readFileSync, writeFileSync } from 'fs';
+const express = require('express');
+const { engine } = require('express-handlebars');
+const bodyParser = require('body-parser');
+const { readFileSync, writeFileSync } = require('fs');
 
 const PORT = 3000;
 const DATA_FILE = './phone_book.json'
@@ -76,7 +76,7 @@ app.post('/delete', (req, res) => {
 })
 
 app.listen(PORT, () => {
-	console.log(`Сервер прослушивает порт ${PORT}`)
+	console.log(`Server is running at localhost:${PORT}`)
 });
 
 function getRecordByFullName(fullName) {
