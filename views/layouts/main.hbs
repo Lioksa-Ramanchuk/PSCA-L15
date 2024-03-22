@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Lab 15</title>
+    <link rel="stylesheet" href="/styles/style.css">
+</head>
+<body>
+    <main>
+        <ul class="list-container">
+            {{#each data}}
+                <li>{{> record}}</li>
+            {{/each}}
+        </ul>
+        {{#if renderGet}}
+            {{> getPanel data=data}}
+        {{/if}}
+        {{#if renderAdd}}
+            {{> addPanel data=data}}
+        {{/if}}
+        {{#if renderUpdate}}
+            {{> updatePanel data=data record=record}}
+        {{/if}}
+    </main>
+</body>
+</html>

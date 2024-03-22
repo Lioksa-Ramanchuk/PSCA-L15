@@ -1,0 +1,24 @@
+<form class="form-update" method="post" autocomplete="off">
+    <div class="record-row">
+        <input id="full-name" type="text" name="fullName" value="{{record.fullName}}" placeholder="Фамилия, имя, отчество" required/>
+        <input id="phone-number" type="tel" name="phoneNumber" value="{{record.phoneNumber}}" placeholder="Телефон" required/>
+    </div>
+    <div class="buttons-row">
+        <button class="button-btn" type="submit" formaction="/update">Изменить</button>
+        <button id="delete-btn" class="button-btn" type="submit" formaction="/delete">Удалить</button>
+        {{{cancelButton}}}
+    </div>
+</form>
+
+<script>
+    const $ = function(query) { return document.querySelector(query); };
+    const $$ = function(query) { return document.querySelectorAll(query); };
+
+    for (let rec of $$('.list-container .record')) {
+        rec.style.pointerEvents = 'none';
+    }
+
+    let disableDeleteBtn = () => $('#delete-btn').disabled = 1;
+    $('#full-name').oninput = disableDeleteBtn;
+    $('#phone-number').oninput = disableDeleteBtn;
+</script>
