@@ -4,7 +4,7 @@ const bodyParser = require('body-parser');
 const { readFileSync, writeFileSync } = require('fs');
 
 const PORT = 3000;
-const DATA_FILE = './phone_book.json'
+const DATA_FILE = './phone_book.json';
 
 const app = express();
 app.use(express.static('public'));
@@ -14,34 +14,38 @@ app.engine('hbs', engine({
 	extname: 'hbs',
 	helpers: {
 		cancelButton: () => {
-			return `<button type="button" class="button-btn" onclick="window.location.href='/'">Отказаться</button>`
+			return `<button type="button" class="button-btn" onclick="window.location.href='/'">Скасаваць</button>`;
+		},
+		dots: (str1, str2) => {
+			const nDots = 50 - str1.length - str2.length;
+			return `${str1}${' ·'.repeat(nDots)} ${str2}`;
 		}
 	}
 }));
 
 app.get('/', (_req, res) => {
 	const data = getJsonData(DATA_FILE);
-	renderPage(res, { data, renderGet: true })
+	renderPage(res, { data, renderGet: true });
 });
 app.get('/add', (_req, res) => {
 	const data = getJsonData(DATA_FILE);
-	renderPage(res, { data, renderAdd: true })
+	renderPage(res, { data, renderAdd: true });
 });
 app.get('/update', (req, res) => {
 	const fullName = req.query.fullName;
 	const data = getJsonData(DATA_FILE);
 	const recordIndex = data.findIndex(rec => rec.fullName === fullName);
 	if (recordIndex === -1) {
-		renderError(res, 404, 'Записи с таким ФИО нет');
+		renderError(res, 404, 'Запісу з такім імем няма');
 		return;
 	}
-	renderPage(res, { data, record: data[recordIndex], renderUpdate: true })
+	renderPage(res, { data, record: data[recordIndex], renderUpdate: true });
 });
 
 app.post('/add', (req, res) => {
 	const { fullName, phoneNumber } = req.body;
 	if (getRecordByFullName(fullName)) {
-		renderError(res, 400, 'Запись с таким ФИО уже есть');
+		renderError(res, 400, 'Запіс з такім імем ужо ёсць');
 		return;
 	}
 	let data = getJsonData(DATA_FILE);
@@ -55,32 +59,32 @@ app.post('/update', (req, res) => {
 	let data = getJsonData(DATA_FILE);
 	const recordIndex = data.findIndex(rec => rec.fullName === fullName);
 	if (recordIndex === -1) {
-		renderError(res, 404, 'Записи с таким ФИО нет');
+		renderError(res, 404, 'Запісу з такім імем няма');
 		return;
 	}
 	data[recordIndex].phoneNumber = phoneNumber;
 	updateJsonData(DATA_FILE, data);
-	res.redirect('/')
-})
+	res.redirect('/');
+});
 app.post('/delete', (req, res) => {
 	const { fullName } = req.body;
 	let data = getJsonData(DATA_FILE);
 	const recordIndex = data.findIndex(rec => rec.fullName === fullName);
 	if (recordIndex === -1) {
-		renderError(res, 404, 'Записи с таким ФИО нет');
+		renderError(res, 404, 'Запісу з такім імем няма');
 		return;
 	}
 	data.splice(recordIndex, 1);
 	updateJsonData(DATA_FILE, data);
 	res.redirect('/');
-})
+});
 
 app.listen(PORT, () => {
-	console.log(`Server is running at localhost:${PORT}`)
+	console.log(`Server is running at localhost:${PORT}`);
 });
 
 function getRecordByFullName(fullName) {
-	return getJsonData(DATA_FILE).find(rec => rec.fullName === fullName)
+	return getJsonData(DATA_FILE).find(rec => rec.fullName === fullName);
 }
 
 function getJsonData(file) {
@@ -98,5 +102,5 @@ function renderPage(res, params) {
 	res.render('layouts/main', params);
 }
 function renderError(res, code, message) {
-	res.status(code).contentType('json').send(JSON.stringify({ message }))
+	res.status(code).contentType('json').send(JSON.stringify({ message }));
 }
